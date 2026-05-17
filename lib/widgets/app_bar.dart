@@ -22,6 +22,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       iconTheme: const IconThemeData(color: AppColors.textPrimary),
       title: Text(title, style: AppTextStyles.appBarTitle),
+      bottomOpacity: 0.5,
       leading:
           leading ??
           (Navigator.canPop(context)
@@ -36,10 +37,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 )),
       actions: actions,
       bottom: PreferredSize(
-        preferredSize: const Size.fromHeight(2),
+        preferredSize: const Size.fromHeight(1),
         child: Container(
           height: 2,
-          decoration: BoxDecoration(gradient: AppColors.grad),
+          decoration: BoxDecoration(color: AppColors.grad),
         ),
       ),
     );

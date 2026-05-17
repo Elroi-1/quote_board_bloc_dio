@@ -129,7 +129,7 @@ void main() {
   runApp(
     MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(scaffoldBackgroundColor: AppColors.background),
+      theme: ThemeData(scaffoldBackgroundColor: AppColors.appBackground),
       home: HomeScreen(),
     ),
   );
