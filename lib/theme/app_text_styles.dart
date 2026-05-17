@@ -13,8 +13,9 @@ class AppTextStyles {
   );
 
   static final TextStyle quoteTitle = GoogleFonts.manrope(
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
+    fontStyle: FontStyle.italic,
   );
 }

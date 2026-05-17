@@ -4,6 +4,7 @@ import '../service/quote_service.dart';
 import '../widgets/app_bar.dart';
 import 'add_edit_quote_screen.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_text_styles.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -79,7 +80,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(
                           "\"" + quote.quote + "\"",
-                          style: TextStyle(color: AppColors.textPrimary),
+                          style: AppTextStyles.quoteTitle,
+                          // TextStyle(
+                          //   color: AppColors.textPrimary,
+                          //   fontSize: 20,
+                          // ),
                         ),
                         const SizedBox(height: 20),
                         Row(
