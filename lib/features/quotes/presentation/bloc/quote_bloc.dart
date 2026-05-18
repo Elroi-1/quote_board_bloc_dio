@@ -1,12 +1,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../service/quote_service.dart';
+
+import '../../data/repositories/quote_repository.dart';
 import 'quote_event.dart';
 import 'quote_state.dart';
 
 class QuoteBloc extends Bloc<QuoteEvent, QuoteState> {
-  final QuoteService quoteService;
+  final QuoteRepository quoteRepository;
 
-  QuoteBloc(this.quoteService) : super(QuoteInitial()) {
+  QuoteBloc(this.quoteRepository) : super(QuoteInitial()) {
     on<GetQuotesEvent>(_onGetQuotes);
     on<AddQuoteEvent>(_onAddQuote);
     on<UpdateQuoteEvent>(_onUpdateQuote);
@@ -19,7 +20,7 @@ class QuoteBloc extends Bloc<QuoteEvent, QuoteState> {
   ) async {
     emit(QuoteLoading());
     try {
-      final quotes = await quoteService.getQuotes();
+      final quotes = await quoteRepository.getQuotes();
       emit(QuoteLoaded(quotes));
     } catch (e) {
       emit(QuoteError(e.toString()));
@@ -31,8 +32,8 @@ class QuoteBloc extends Bloc<QuoteEvent, QuoteState> {
     Emitter<QuoteState> emit,
   ) async {
     try {
-      await quoteService.addQuote(event.quote);
-      add(GetQuotesEvent()); // Refresh quotes
+      await quoteRepository.addQuote(event.quote);
+      add(GetQuotesEvent());
     } catch (e) {
       emit(QuoteError(e.toString()));
     }
@@ -43,8 +44,8 @@ class QuoteBloc extends Bloc<QuoteEvent, QuoteState> {
     Emitter<QuoteState> emit,
   ) async {
     try {
-      await quoteService.updateQuote(event.quote);
-      add(GetQuotesEvent()); // Refresh quotes
+      await quoteRepository.updateQuote(event.quote);
+      add(GetQuotesEvent());
     } catch (e) {
       emit(QuoteError(e.toString()));
     }
@@ -55,8 +56,8 @@ class QuoteBloc extends Bloc<QuoteEvent, QuoteState> {
     Emitter<QuoteState> emit,
   ) async {
     try {
-      await quoteService.deleteQuote(event.id);
-      add(GetQuotesEvent()); // Refresh quotes
+      await quoteRepository.deleteQuote(event.id);
+      add(GetQuotesEvent());
     } catch (e) {
       emit(QuoteError(e.toString()));
     }

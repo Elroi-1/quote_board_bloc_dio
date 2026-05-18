@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:quote_board_bloc/screens/home_screen.dart';
-import '../models/quote_model.dart';
-import '../bloc/quote_bloc.dart';
-import '../bloc/quote_event.dart';
-import '../widgets/app_bar.dart';
+import 'package:quote_board_bloc/features/quotes/data/models/quote_model.dart';
+import 'package:quote_board_bloc/features/quotes/presentation/bloc/quote_bloc.dart';
+import 'package:quote_board_bloc/features/quotes/presentation/bloc/quote_event.dart';
+import 'package:quote_board_bloc/features/quotes/presentation/screens/home_screen.dart';
+import 'package:quote_board_bloc/widgets/app_bar.dart';
 
 class AddEditQuoteScreen extends StatefulWidget {
   final Quote? quote;
@@ -43,7 +43,6 @@ class _AddEditQuoteScreenState extends State<AddEditQuoteScreen> {
 
     if (!mounted) return;
 
-    // Explicitly navigate to the home screen as requested
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -66,7 +65,6 @@ class _AddEditQuoteScreenState extends State<AddEditQuoteScreen> {
             child: Column(
               children: [
                 SizedBox(height: 20),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextField(
@@ -77,9 +75,7 @@ class _AddEditQuoteScreenState extends State<AddEditQuoteScreen> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 20),
-
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: TextField(
@@ -90,11 +86,8 @@ class _AddEditQuoteScreenState extends State<AddEditQuoteScreen> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 20),
-
                 ElevatedButton(onPressed: saveQuote, child: const Text("Save")),
-
                 SizedBox(height: 20),
               ],
             ),

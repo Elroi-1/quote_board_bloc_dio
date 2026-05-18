@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
-import '../models/quote_model.dart';
+
+import '../../data/models/quote_model.dart';
 
 abstract class QuoteState extends Equatable {
   const QuoteState();

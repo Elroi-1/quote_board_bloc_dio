@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'screens/home_screen.dart';
-import 'bloc/quote_bloc.dart';
-import 'service/quote_service.dart';
-import 'theme/app_colors.dart';
+import 'package:quote_board_bloc/features/quotes/data/repositories/quote_repository.dart';
+import 'package:quote_board_bloc/features/quotes/presentation/bloc/quote_bloc.dart';
+import 'package:quote_board_bloc/features/quotes/presentation/screens/home_screen.dart';
+import 'package:quote_board_bloc/theme/app_colors.dart';
 
 void main() {
-  final quoteService = QuoteService();
+  final quoteRepository = QuoteRepository();
 
   runApp(
     MultiBlocProvider(
-      providers: [BlocProvider(create: (_) => QuoteBloc(quoteService))],
+      providers: [
+        BlocProvider(create: (_) => QuoteBloc(quoteRepository)),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(scaffoldBackgroundColor: AppColors.appBackground),

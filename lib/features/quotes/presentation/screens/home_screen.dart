@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/quote_bloc.dart';
-import '../bloc/quote_event.dart';
-import '../bloc/quote_state.dart';
-import '../widgets/app_bar.dart';
-import 'add_edit_quote_screen.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_text_styles.dart';
+import 'package:quote_board_bloc/features/quotes/presentation/bloc/quote_bloc.dart';
+import 'package:quote_board_bloc/features/quotes/presentation/bloc/quote_event.dart';
+import 'package:quote_board_bloc/features/quotes/presentation/bloc/quote_state.dart';
+import 'package:quote_board_bloc/features/quotes/presentation/screens/add_edit_quote_screen.dart';
+import 'package:quote_board_bloc/theme/app_colors.dart';
+import 'package:quote_board_bloc/theme/app_text_styles.dart';
+import 'package:quote_board_bloc/widgets/app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          return Container(); // Should never reach here
+          return Container();
         },
       ),
     );
