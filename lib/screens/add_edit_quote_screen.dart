@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:quote_board_bloc/screens/home_screen.dart';
 import '../models/quote_model.dart';
-import '../service/quote_service.dart';
+import '../bloc/quote_bloc.dart';
+import '../bloc/quote_event.dart';
 import '../widgets/app_bar.dart';
 
 class AddEditQuoteScreen extends StatefulWidget {
@@ -14,7 +16,6 @@ class AddEditQuoteScreen extends StatefulWidget {
 }
 
 class _AddEditQuoteScreenState extends State<AddEditQuoteScreen> {
-  final QuoteService service = QuoteService();
   final quoteController = TextEditingController();
   final authorController = TextEditingController();
 
@@ -27,7 +28,7 @@ class _AddEditQuoteScreenState extends State<AddEditQuoteScreen> {
     }
   }
 
-  void saveQuote() async {
+  void saveQuote() {
     final quote = Quote(
       id: widget.quote?.id,
       quote: quoteController.text,
@@ -35,9 +36,9 @@ class _AddEditQuoteScreenState extends State<AddEditQuoteScreen> {
     );
 
     if (widget.quote == null) {
-      await service.addQuote(quote);
+      context.read<QuoteBloc>().add(AddQuoteEvent(quote));
     } else {
-      await service.updateQuote(quote);
+      context.read<QuoteBloc>().add(UpdateQuoteEvent(quote));
     }
 
     if (!mounted) return;

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/quote_model.dart';
-import '../service/quote_service.dart';
+import '../bloc/quote_bloc.dart';
+import '../bloc/quote_event.dart';
+import '../bloc/quote_state.dart';
 import '../widgets/app_bar.dart';
 import 'add_edit_quote_screen.dart';
 import '../theme/app_colors.dart';
@@ -12,19 +15,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final QuoteService service = QuoteService();
-  late Future<List<Quote>> quotesFuture;
-
   @override
   void initState() {
     super.initState();
-    quotesFuture = service.getQuotes();
-  }
-
-  void refresh() {
-    setState(() {
-      quotesFuture = service.getQuotes();
-    });
+    context.read<QuoteBloc>().add(GetQuotesEvent());
   }
 
   @override
@@ -37,103 +31,105 @@ class _HomeScreenState extends State<HomeScreen> {
             context,
             MaterialPageRoute(builder: (_) => AddEditQuoteScreen()),
           );
-          refresh();
         },
         child: Icon(Icons.add),
       ),
-      body: FutureBuilder<List<Quote>>(
-        future: quotesFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
+      body: BlocBuilder<QuoteBloc, QuoteState>(
+        builder: (context, state) {
+          if (state is QuoteLoading || state is QuoteInitial) {
             return Center(child: CircularProgressIndicator());
+          }
 
-          if (snapshot.hasError)
-            return Center(child: Text('Error: ${snapshot.error}'));
+          if (state is QuoteError) {
+            return Center(child: Text('Error: ${state.message}'));
+          }
 
-          final quotes = snapshot.data!;
+          if (state is QuoteLoaded) {
+            final quotes = state.quotes;
 
-          return ListView.builder(
-            itemCount: quotes.length,
-            itemBuilder: (context, index) {
-              final quote = quotes[index];
-              return Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.surface,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
+            return ListView.builder(
+              itemCount: quotes.length,
+              itemBuilder: (context, index) {
+                final quote = quotes[index];
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "\"" + quote.quote + "\"",
-                          style: AppTextStyles.quoteTitle,
-                          // TextStyle(
-                          //   color: AppColors.textPrimary,
-                          //   fontSize: 20,
-                          // ),
-                        ),
-                        const SizedBox(height: 20),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              quote.author,
-                              style: TextStyle(color: AppColors.textSecondary),
-                            ),
-                            Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.edit,
-                                    color: AppColors.iconColor,
-                                  ),
-                                  onPressed: () async {
-                                    await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) =>
-                                            AddEditQuoteScreen(quote: quote),
-                                      ),
-                                    );
-                                    refresh();
-                                  },
-                                ),
-                                IconButton(
-                                  icon: Icon(
-                                    Icons.delete,
-                                    color: AppColors.delete,
-                                  ),
-                                  onPressed: () async {
-                                    await service.deleteQuote(quote.id!);
-                                    refresh();
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: AppColors.surface,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black,
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
                         ),
                       ],
                     ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "\"" + quote.quote + "\"",
+                            style: AppTextStyles.quoteTitle,
+                          ),
+                          const SizedBox(height: 20),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                quote.author,
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                              Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.edit,
+                                      color: AppColors.iconColor,
+                                    ),
+                                    onPressed: () async {
+                                      await Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) =>
+                                              AddEditQuoteScreen(quote: quote),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  IconButton(
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: AppColors.delete,
+                                    ),
+                                    onPressed: () {
+                                      context.read<QuoteBloc>().add(
+                                        DeleteQuoteEvent(quote.id!),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
-              );
-            },
-          );
+                );
+              },
+            );
+          }
+
+          return Container(); // Should never reach here
         },
       ),
     );
