@@ -16,3 +16,24 @@ with clean architecture and separation of concerns.
 
 - **cupertino_icons**: Provides access to iOS-style default icons.
     flutter pub add cupertino_icons
+
+## App Screenshots
+
+### Home Screen
+![Home Screen](screenshots/home.png)
+
+### Add Quote Screen
+![Add Screen](screenshots/add.png)
+![Add Screen](screenshots/add2.png)
+![Home Screen](screenshots/homeadd.png)
+
+### Edit Quote Screen
+![Edit Screen](screenshots/edit1.png)
+![Edit Screen](screenshots/edit2.png)
+![Home Screen](screenshots/homeedit.png)
+
+
+### Delete Quote Screen
+![Home Screen](screenshots/home.png)
+![Home Screen](screenshots/homedelet.png)
+

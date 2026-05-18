@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../models/quote_model.dart';
 import '../bloc/quote_bloc.dart';
 import '../bloc/quote_event.dart';
 import '../bloc/quote_state.dart';
