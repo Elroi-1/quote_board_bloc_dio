@@ -37,3 +37,6 @@ with clean architecture and separation of concerns.
 ![Home Screen](screenshots/home.png)
 ![Home Screen](screenshots/homedelet.png)
 
+
+### Error Screen
+![Home Screen](screenshots/homeerror.png)
