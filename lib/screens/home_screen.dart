@@ -40,7 +40,57 @@ class _HomeScreenState extends State<HomeScreen> {
           }
 
           if (state is QuoteError) {
-            return Center(child: Text('Error: ${state.message}'));
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.wifi_off_rounded,
+                      size: 64,
+                      color: AppColors.delete,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Failed to load quotes',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Could not connect to the server.\nPlease check your internet connection and try again.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: AppColors.textPrimary,
+                        fontSize: 13,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.surface,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 12,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () =>
+                          context.read<QuoteBloc>().add(GetQuotesEvent()),
+                      icon: Icon(Icons.refresh),
+                      label: Text('Retry'),
+                    ),
+                  ],
+                ),
+              ),
+            );
           }
 
           if (state is QuoteLoaded) {
