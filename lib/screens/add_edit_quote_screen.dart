@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:quote_board_bloc/screens/home_screen.dart';
 import '../models/quote_model.dart';
 import '../service/quote_service.dart';
 import '../widgets/app_bar.dart';
@@ -39,7 +40,14 @@ class _AddEditQuoteScreenState extends State<AddEditQuoteScreen> {
       await service.updateQuote(quote);
     }
 
-    Navigator.pop(context);
+    if (!mounted) return;
+
+    // Explicitly navigate to the home screen as requested
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => HomeScreen()),
+      (route) => false,
+    );
   }
 
   @override
@@ -48,22 +56,49 @@ class _AddEditQuoteScreenState extends State<AddEditQuoteScreen> {
 
     return Scaffold(
       appBar: CustomAppBar(title: isEdit ? "Edit Quote" : "Add Quote"),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            TextField(
-              controller: quoteController,
-              decoration: InputDecoration(labelText: "Quote"),
+      body: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 20),
+          Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              children: [
+                SizedBox(height: 20),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextField(
+                    controller: quoteController,
+                    decoration: InputDecoration(
+                      labelText: "Quote",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: TextField(
+                    controller: authorController,
+                    decoration: InputDecoration(
+                      labelText: "Author",
+                      border: OutlineInputBorder(),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
+                ElevatedButton(onPressed: saveQuote, child: const Text("Save")),
+
+                SizedBox(height: 20),
+              ],
             ),
-            TextField(
-              controller: authorController,
-              decoration: InputDecoration(labelText: "Author"),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(onPressed: saveQuote, child: Text("Save")),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
